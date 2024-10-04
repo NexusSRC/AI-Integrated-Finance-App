@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.css' rel='stylesheet' />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Personal Finance Tracker</h1>
+        </header>
+
+        <!-- Overview Section -->
+        <section class="overview">
+            <div class="card">
+                <h2>Total Revenue</h2>
+                <p id="total-revenue">$10,000</p>
+            </div>
+            <div class="card">
+                <h2>Total Expenses</h2>
+                <p id="total-expenses">$7,000</p>
+            </div>
+            <div class="card">
+                <h2>Current Balance</h2>
+                <p id="current-balance">$3,000</p>
+            </div>
+        </section>
+
+        <!-- Flex container for Calendar and Expense Section -->
+        <div class="flex-container">
+            <!-- Calendar Section -->
+            <section class="calendar-section">
+                <h3>Upcoming Expenses</h3>
+                <div class="calendar">
+                    <div class="col leftCol">
+                        <div class="content">
+                            <h1 class="date">Friday <span>September 12th</span></h1>
+                            <div class="notes">
+                                <p>
+                                    <input type="text" id="note-input" placeholder="New note" />
+                                    <a href="#" title="Add note" class="addNote animate">+</a>
+                                </p>
+                                <ul class="noteList">
+                                    <li>Headbutt a lion <a href="#" title="Remove note" class="removeNote animate">x</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col rightCol">
+                        <div class="content">
+                            <h2 class="year">2024</h2>
+                            <ul class="months">
+                                <li><a href="#" title="Jan" data-value="1">Jan</a></li>
+                                <li><a href="#" title="Feb" data-value="2">Feb</a></li>
+                                <li><a href="#" title="Mar" data-value="3">Mar</a></li>
+                                <li><a href="#" title="Apr" data-value="4">Apr</a></li>
+                                <li><a href="#" title="May" data-value="5">May</a></li>
+                                <li><a href="#" title="Jun" data-value="6">Jun</a></li>
+                                <li><a href="#" title="Jul" data-value="7">Jul</a></li>
+                                <li><a href="#" title="Aug" data-value="8">Aug</a></li>
+                                <li><a href="#" title="Sep" data-value="9" class="selected">Sep</a></li>
+                                <li><a href="#" title="Oct" data-value="10">Oct</a></li>
+                                <li><a href="#" title="Nov" data-value="11">Nov</a></li>
+                                <li><a href="#" title="Dec" data-value="12">Dec</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                            <ul class="weekday">
+                                <li><a href="#" title="Mon" data-value="1">Mon</a></li>
+                                <li><a href="#" title="Tue" data-value="2">Tue</a></li>
+                                <li><a href="#" title="Wed" data-value="3">Wed</a></li>
+                                <li><a href="#" title="Thu" data-value="4">Thu</a></li>
+                                <li><a href="#" title="Fri" data-value="5">Fri</a></li>
+                                <li><a href="#" title="Sat" data-value="6">Sat</a></li>
+                                <li><a href="#" title="Sun" data-value="7">Sun</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                            <ul class="days">
+                                <script>
+                                    for (var _i = 1; _i <= 31; _i += 1) {
+                                        var _addClass = '';
+                                        if (_i === 12) { _addClass = ' class="selected"'; }
+
+                                        switch (_i) {
+                                            case 8:
+                                            case 10:
+                                            case 27:
+                                                _addClass = ' class="event"';
+                                                break;
+                                        }
+
+                                        document.write('<li><a href="#" title="' + _i + '" data-value="' + _i + '"' + _addClass + '>' + _i + '</a></li>');
+                                    }
+                                </script>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </section>
+
+            <!-- Expense Entry Section -->
+            <section class="expense-section">
+                <h3>Add Expense</h3>
+                <form id="expense-form">
+                    <label for="expense-name">Expense Name:</label>
+                    <input type="text" id="expense-name" required>
+
+                    <label for="expense-amount">Amount:</label>
+                    <input type="number" id="expense-amount" required>
+
+                    <label for="expense-date">Date:</label>
+                    <input type="date" id="expense-date" required>
+
+                    <button type="submit">Add Expense</button>
+                </form>
+            </section>
+        </div>
+
+        <!-- Graph Section -->
+        <section class="graphs">
+            <div class="graph-card">
+                <h3>Expense Distribution (Pie Chart)</h3>
+                <canvas id="expense-pie-chart"></canvas>
+            </div>
+            <div class="graph-card">
+                <h3>Goals Progress (Line Graph)</h3>
+                <canvas id="goals-line-chart"></canvas>
+            </div>
+            <div class="graph-card">
+                <h3>Past Expenses (Bar Graph - Last 6 Months)</h3>
+                <canvas id="past-expenses-bar-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Notifications Section -->
+<section class="notifications">
+    <h3>Upcoming Bills</h3>
+    <ul>
+        <li>Electricity Bill - $100 - Due on 10th Oct</li>
+        <li>Credit Card Payment - $500 - Due on 15th Oct</li>
+        <li>Internet Bill - $50 - Due on 20th Oct</li>
+    </ul>
+
+    <!-- New Text Display Box -->
+    <div class="text-display-box">
+        <h4>Notes:</h4>
+        <p id="display-notes">This is where you can add additional notes or reminders.</p>
+    </div>
+</section>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
