@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
         calendar.render(); // Render the calendar
     }
 
-    function updateCharts() {
+    async function updateCharts() {
         // Pie Chart for Expenses Distribution
         const ctx1 = document.getElementById('expense-pie-chart').getContext('2d');
         if (ctx1) {
@@ -137,5 +137,15 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             console.log("Canvas element for bar chart not found.");
         }
+        // const response = await fetch('/model/chat', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({prompt: "Your prompt here"})
+        // });
+        //
+        // const data = await response.json();
+        // console.log(data.response);
     }
 });

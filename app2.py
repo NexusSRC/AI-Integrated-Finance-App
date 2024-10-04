@@ -2,23 +2,22 @@ from flask import Flask, render_template, request, jsonify
 from langchain_community.llms import Ollama
 import pandas as pd
 import os
-from werkzeug.utils import secure_filename
-import logging
 
 app = Flask(__name__)
 llm = Ollama(model="llama3")
+
+# Create uploads directory if it doesn't exist
 uploads_dir = 'uploads'
 if not os.path.exists(uploads_dir):
     os.makedirs(uploads_dir)
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
 
 def fetch_financial_data(file_path):
     try:
-        logging.info(f"Loading data from {file_path}...")
+        print(f"Loading data from {file_path}...")
         df = pd.read_excel(file_path)
 
+        # Check if necessary columns exist
         required_columns = [
             'Age',
             'Current Income',
@@ -30,18 +29,20 @@ def fetch_financial_data(file_path):
             'Savings Goals'
         ]
 
-        logging.info(f"Columns in the Excel file: {df.columns.tolist()}")
+        print(f"Columns in the Excel file: {df.columns.tolist()}")
 
         if not all(col in df.columns for col in required_columns):
             raise ValueError("Missing required columns in the Excel file.")
 
+        # Extract data
         data = {col.lower().replace(' ', '_'): df[col].iloc[0] for col in required_columns}
-        logging.info(f"Extracted financial data: {data}")
+        print(f"Extracted financial data: {data}")
         return data
 
     except Exception as e:
-        logging.error(f"Error fetching financial data: {str(e)}")
+        print(f"Error fetching financial data: {str(e)}")
         return {"error": str(e)}
+
 
 @app.route('/model/chat', methods=['POST'])
 def recommend():
@@ -49,9 +50,8 @@ def recommend():
         return jsonify({"error": "No file uploaded."}), 400
 
     file = request.files['file']
-    filename = secure_filename(file.filename)
-    file_path = os.path.join(uploads_dir, filename)
-    logging.info(f"Saving uploaded file to {file_path}...")
+    file_path = os.path.join(uploads_dir, file.filename)
+    print(f"Saving uploaded file to {file_path}...")
     file.save(file_path)
 
     financial_data = fetch_financial_data(file_path)
@@ -60,6 +60,7 @@ def recommend():
     if "error" in financial_data:
         return jsonify({"error": financial_data["error"]}), 400
 
+    # Prepare the prompt for the language model
     prompt = f"""I would like some advice on reviewing my financial status and would love
               to learn how to improve my finances as per my goals and needs:
               age: {financial_data['age']} 
@@ -71,19 +72,22 @@ def recommend():
               types of investments: {financial_data['types_of_investments']}
               savings goals: {financial_data['savings_goals']}"""
 
-    logging.info(f"Prompt for LLM: {prompt}")
+    print(f"Prompt for LLM: {prompt}")
 
     try:
         response = llm.invoke(prompt, stop=['<|eot_id|>'])
-        logging.info("Received response from LLM.")
+        print(response)
+        print(f"Received response from LLM.")
         return jsonify({"response": response})
     except Exception as e:
-        logging.error(f"Error invoking LLM: {str(e)}")
+        print(f"Error invoking LLM: {str(e)}")
         return jsonify({"error": "Failed to get advice from the model: " + str(e)}), 500
+
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index1.html')
+
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

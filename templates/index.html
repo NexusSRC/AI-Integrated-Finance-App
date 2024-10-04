@@ -17,15 +17,15 @@
         <section class="overview">
             <div class="card">
                 <h2>Total Revenue</h2>
-                <p id="total-revenue">$10,000</p>
+                <p id="total-revenue">₹10,000</p>
             </div>
             <div class="card">
                 <h2>Total Expenses</h2>
-                <p id="total-expenses">$7,000</p>
+                <p id="total-expenses">₹7,000</p>
             </div>
             <div class="card">
                 <h2>Current Balance</h2>
-                <p id="current-balance">$3,000</p>
+                <p id="current-balance">₹3,000</p>
             </div>
         </section>
 
@@ -35,71 +35,7 @@
             <section class="calendar-section">
                 <h3>Upcoming Expenses</h3>
                 <div class="calendar">
-                    <div class="col leftCol">
-                        <div class="content">
-                            <h1 class="date">Friday <span>September 12th</span></h1>
-                            <div class="notes">
-                                <p>
-                                    <input type="text" id="note-input" placeholder="New note" />
-                                    <a href="#" title="Add note" class="addNote animate">+</a>
-                                </p>
-                                <ul class="noteList">
-                                    <li>Headbutt a lion <a href="#" title="Remove note" class="removeNote animate">x</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col rightCol">
-                        <div class="content">
-                            <h2 class="year">2024</h2>
-                            <ul class="months">
-                                <li><a href="#" title="Jan" data-value="1">Jan</a></li>
-                                <li><a href="#" title="Feb" data-value="2">Feb</a></li>
-                                <li><a href="#" title="Mar" data-value="3">Mar</a></li>
-                                <li><a href="#" title="Apr" data-value="4">Apr</a></li>
-                                <li><a href="#" title="May" data-value="5">May</a></li>
-                                <li><a href="#" title="Jun" data-value="6">Jun</a></li>
-                                <li><a href="#" title="Jul" data-value="7">Jul</a></li>
-                                <li><a href="#" title="Aug" data-value="8">Aug</a></li>
-                                <li><a href="#" title="Sep" data-value="9" class="selected">Sep</a></li>
-                                <li><a href="#" title="Oct" data-value="10">Oct</a></li>
-                                <li><a href="#" title="Nov" data-value="11">Nov</a></li>
-                                <li><a href="#" title="Dec" data-value="12">Dec</a></li>
-                            </ul>
-                            <div class="clearfix"></div>
-                            <ul class="weekday">
-                                <li><a href="#" title="Mon" data-value="1">Mon</a></li>
-                                <li><a href="#" title="Tue" data-value="2">Tue</a></li>
-                                <li><a href="#" title="Wed" data-value="3">Wed</a></li>
-                                <li><a href="#" title="Thu" data-value="4">Thu</a></li>
-                                <li><a href="#" title="Fri" data-value="5">Fri</a></li>
-                                <li><a href="#" title="Sat" data-value="6">Sat</a></li>
-                                <li><a href="#" title="Sun" data-value="7">Sun</a></li>
-                            </ul>
-                            <div class="clearfix"></div>
-                            <ul class="days">
-                                <script>
-                                    for (var _i = 1; _i <= 31; _i += 1) {
-                                        var _addClass = '';
-                                        if (_i === 12) { _addClass = ' class="selected"'; }
-
-                                        switch (_i) {
-                                            case 8:
-                                            case 10:
-                                            case 27:
-                                                _addClass = ' class="event"';
-                                                break;
-                                        }
-
-                                        document.write('<li><a href="#" title="' + _i + '" data-value="' + _i + '"' + _addClass + '>' + _i + '</a></li>');
-                                    }
-                                </script>
-                            </ul>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
+                    <!-- Calendar content... -->
                 </div>
             </section>
 
@@ -137,22 +73,43 @@
             </div>
         </section>
 
-        <!-- Notifications Section -->
-<section class="notifications">
-    <h3>Upcoming Bills</h3>
-    <ul>
-        <li>Electricity Bill - $100 - Due on 10th Oct</li>
-        <li>Credit Card Payment - $500 - Due on 15th Oct</li>
-        <li>Internet Bill - $50 - Due on 20th Oct</li>
-    </ul>
+        <!-- Financial Advisor Section -->
+        <section class="chat">
+    <h1>Financial Advisor</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".xlsx" required class="file-input">
+        <button type="submit" class="upload-button">Get Advice</button>
+    </form>
+    <div id="response" class="response-box"></div>
 
-    <!-- New Text Display Box -->
-    <div class="text-display-box">
-        <h4>Notes:</h4>
-        <p id="display-notes">This is where you can add additional notes or reminders.</p>
-    </div>
+    <script>
+        document.getElementById('uploadForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch('/model/chat', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            document.getElementById('response').innerText = data.response || data.error;
+        };
+    </script>
 </section>
 
+        <!-- Notifications Section -->
+        <section class="notifications">
+            <h3>Upcoming Bills</h3>
+            <ul>
+                <li>Electricity Bill - ₹100 - Due on 10th Oct</li>
+                <li>Credit Card Payment - ₹500 - Due on 15th Oct</li>
+                <li>Internet Bill - ₹50 - Due on 20th Oct</li>
+            </ul>
+
+            <div class="text-display-box">
+                <h4>Notes:</h4>
+                <p id="display-notes">This is where you can add additional notes or reminders.</p>
+            </div>
+        </section>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
